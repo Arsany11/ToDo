@@ -1,6 +1,7 @@
 const list = document.getElementById('todoItems');
 let btn = document.getElementById('add');
 let input = document.getElementById('inputtxt');
+const items = document.querySelectorAll('.todo');
 list.addEventListener('click', (event) => {
     // Check if the clicked element is an icon
     if (event.target.classList.contains('checkIcon')) {
@@ -14,19 +15,18 @@ list.addEventListener('click', (event) => {
             parentLi.classList.add('done');
         }
     }
-    if(event.target.classList.contains('trashIcon')) {
+    if (event.target.classList.contains('trashIcon')) {
         const parentLi = event.target.closest('li');
         parentLi.remove();
     }
 });
-
-
-btn.addEventListener('click', (event) => {
-
+function additem() {
     const text = input.value;
     if (text) {
         // Add a new item to the list
         let li = document.createElement('li');
+        li.classList.add("todo","draggable");
+        li.setAttribute('draggable',true);
         //first icon
         let listIcon = document.createElement('i');
         listIcon.classList.add("fa-solid", "fa-list", "listIcon");
@@ -49,9 +49,81 @@ btn.addEventListener('click', (event) => {
         li.appendChild(trashIcon);
         li.appendChild(span);
         li.appendChild(editIcon);
+
+        attachDragevents(li);
         list.appendChild(li);
         //clear the input
         input.value = "";
     }
-    console.log(text);
+}
+
+// adding event listener throw clicking on button or pressing enter
+btn.addEventListener('click', additem);
+input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        additem();
+    }
 });
+
+// if working on dynamic data
+
+function attachDragevents(item){
+    item.addEventListener('dragstart', () => {
+        item.classList.add('dragging');
+    });
+    item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+    });
+}
+
+
+list.addEventListener('dragover',(event)=>{
+    event.preventDefault();
+    const afterElement = getDrageAfterElement(list, event.clientY)
+    const draggable = document.querySelector('.dragging')
+    if (afterElement == null) {
+        list.appendChild(draggable)
+    } else {
+        list.insertBefore(draggable, afterElement)
+    }
+})
+
+// working on static data
+//{
+// items.forEach((item) => {
+//     item.addEventListener('dragstart', () => {
+//         item.classList.add('dragging');
+//     });
+
+//     item.addEventListener('dragend', () => {
+//         item.classList.remove('dragging');
+//     });
+// })
+
+// items.forEach(item => {
+//     item.addEventListener('dragover', (event) => {
+//         event.preventDefault();
+//         const afterElement = getDrageAfterElement(list, event.clientY)
+//         const draggable = document.querySelector('.dragging')
+//         if (afterElement == null) {
+//             list.appendChild(draggable)
+//         } else {
+//             list.insertBefore(draggable, afterElement)
+//         }
+//     })
+// })
+//}
+function getDrageAfterElement(list, y) {
+    const draggableElements = [...list.querySelectorAll('.todo:not(.dragging)')];
+    return draggableElements.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        console.log(offset);
+        if (offset < 0 && offset > closest.offset) {
+            return { offset: offset, element: child }
+        } else {
+            return closest
+        }
+
+    }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
