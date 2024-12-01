@@ -2,39 +2,120 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Lato', 'sans-serif';
+    font-family: 'roboto', arial, helvetica, sans-serif;
 }
 
 body {
     background-image: url(../image/log1.jpg);
     background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .input {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40%;
+    width: 45%;
     margin: auto;
     margin-top: 5%;
-
 }
-.item{
+
+.newitem {
     width: 100%;
-    height: 4rem;
+    height: 5rem;
     background-color: #e5e5e5e3;
     font-size: 25px;
-    padding: 10px;
-    /* border: solid 2px #fff; */
+    padding: 30px;
+    border: solid 1px transparent;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    font-weight: 400;
 }
-.add{
+
+#add {
     background-color: #0b0b0b;
     color: whitesmoke;
-    font-size: 30px;
-    font-weight:bolder;
-    height: 4rem;
-    width: 4rem;
+    font-size: 40px;
+    font-weight: bolder;
+    font-family: fontawesome;
+    height: 5rem;
+    width: 7rem;
     border: solid 2px #0b0b0b;
+    cursor: pointer;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.items ul li {
+    list-style: none;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45%;
+    height: 3rem;
+    background-color: #e5e5e5e3;
+    margin: auto;
+    border: double 0.1px #afaeae;
+    font-size: 17px;
+
+}
+
+.editIcon {
+    color: rgb(27, 127, 2);
+}
+
+.listIcon {
+    margin: 0px 7px;
+    color: #757575;
+    cursor: grab;
+
+}
+
+.checkIcon {
+    color: #757575;
+}
+
+.editIcon,
+.checkIcon,
+.trashIcon {
+    cursor: pointer;
+    margin: 0px 7px;
+}
+
+.trashIcon {
+    margin: 0px 30px 0px 7px;
+    color: rgb(156, 0, 0);
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.mytext {
+    flex-grow: 1;
+    font-size: 20px;
+}
+
+.items ul li:hover {
+    background-color: #d6d6d6b8;
+
+    .trashIcon {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+}
+
+.items ul .done {
+    .checkIcon {
+        background-color: #ffffff;
+        border-radius: 50%;
+        border-color: transparent;
+    }
+
+    color:rgba(0, 0, 0, 0.3);
+
+    .mytext {
+        text-decoration: line-through;
+        color: gray;
+    }
+
 }
