@@ -3,21 +3,45 @@ let btn = document.getElementById('add');
 let input = document.getElementById('inputtxt');
 const items = document.querySelectorAll('.todo');
 list.addEventListener('click', (event) => {
-    // Check if the clicked element is an icon
+    // event listener for mark done
+    // Check if the clicked element is an correct icon
     if (event.target.classList.contains('checkIcon')) {
         // Find the parent <li> of the clicked icon
         const parentLi = event.target.closest('li');
-
+        let myicon = parentLi.querySelector('.checkIcon');
         if (parentLi.classList.contains('done')) {
             parentLi.classList.remove('done');
+            myicon.classList.remove('fa-solid');
+            myicon.classList.add('fa-regular');
         }
         else {
             parentLi.classList.add('done');
+            myicon.classList.add('fa-solid');
+            myicon.classList.remove('fa-regular');
         }
     }
+    // event listener for deleting
     if (event.target.classList.contains('trashIcon')) {
         const parentLi = event.target.closest('li');
         parentLi.remove();
+    }
+
+    // event listener for editing
+    if (event.target.classList.contains('editIcon')) {
+        console.log('catch');
+        const parentLi = event.target.closest('li');
+        let myicon = parentLi.querySelector('.editIcon');
+        let span = parentLi.querySelector('.mytext');
+        if (span.contentEditable == "true") {
+            span.contentEditable = "false";
+            myicon.classList.remove('fa-floppy-disk')
+            myicon.classList.add('fa-pen')
+        }
+        else {
+            span.contentEditable = "true";
+            myicon.classList.remove('fa-pen');
+            myicon.classList.add('fa-floppy-disk');
+        }
     }
 });
 function additem() {
@@ -25,8 +49,8 @@ function additem() {
     if (text) {
         // Add a new item to the list
         let li = document.createElement('li');
-        li.classList.add("todo","draggable");
-        li.setAttribute('draggable',true);
+        li.classList.add("todo", "draggable");
+        li.setAttribute('draggable', true);
         //first icon
         let listIcon = document.createElement('i');
         listIcon.classList.add("fa-solid", "fa-list", "listIcon");
@@ -42,6 +66,7 @@ function additem() {
         // craete span for text input
         let span = document.createElement('span');
         span.classList.add("mytext")
+        span.setAttribute('contenteditable', false);
         span.textContent = text;
         // append all elements to li
         li.appendChild(listIcon);
@@ -67,7 +92,7 @@ input.addEventListener('keydown', (event) => {
 
 // if working on dynamic data
 
-function attachDragevents(item){
+function attachDragevents(item) {
     item.addEventListener('dragstart', () => {
         item.classList.add('dragging');
     });
@@ -77,9 +102,9 @@ function attachDragevents(item){
 }
 
 
-list.addEventListener('dragover',(event)=>{
+list.addEventListener('dragover', (event) => {
     event.preventDefault();
-    const afterElement = getDrageAfterElement(list, event.clientY)
+    const afterElement = getDrageAfterElement(event.clientY)
     const draggable = document.querySelector('.dragging')
     if (afterElement == null) {
         list.appendChild(draggable)
@@ -113,8 +138,8 @@ list.addEventListener('dragover',(event)=>{
 //     })
 // })
 //}
-function getDrageAfterElement(list, y) {
-    const draggableElements = [...list.querySelectorAll('.todo:not(.dragging)')];
+function getDrageAfterElement(y) {
+    const draggableElements = [...document.querySelectorAll('.todo:not(.dragging)')];
     return draggableElements.reduce((closest, child) => {
         const box = child.getBoundingClientRect();
         const offset = y - box.top - box.height / 2;
@@ -124,6 +149,5 @@ function getDrageAfterElement(list, y) {
         } else {
             return closest
         }
-
     }, { offset: Number.NEGATIVE_INFINITY }).element;
 }
